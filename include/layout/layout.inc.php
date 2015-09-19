@@ -24,7 +24,8 @@ function head($title = '') {
 
     <!-- CSS -->
     <link href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
-    <link href="',CONFIG_SITE_URL,'css/mellivora.css" rel="stylesheet">';
+    <link href="',CONFIG_SITE_URL,'css/mellivora.css" rel="stylesheet">
+    <link href="',CONFIG_SITE_URL,'css/octicons/octicons.css" rel="stylesheet">';
 
     js_global_dict();
 

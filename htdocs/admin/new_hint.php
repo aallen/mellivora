@@ -9,7 +9,7 @@ menu_management();
 
 section_subhead('New hint');
 form_start(CONFIG_SITE_ADMIN_RELPATH . 'actions/new_hint');
-form_textarea('Body');
+form_textarea('Body',false,true);
 
 $opts = db_query_fetch_all('
     SELECT

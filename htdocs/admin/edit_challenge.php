@@ -18,7 +18,7 @@ menu_management();
 section_subhead('Edit challenge: ' . $challenge['title']);
 form_start(CONFIG_SITE_ADMIN_RELPATH . 'actions/edit_challenge');
 form_input_text('Title', $challenge['title']);
-form_textarea('Description', $challenge['description']);
+form_textarea('Description', $challenge['description'], true);
 
 form_textarea('Flag', $challenge['flag']);
 form_input_checkbox('Automark', $challenge['automark']);

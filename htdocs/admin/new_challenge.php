@@ -10,7 +10,7 @@ section_subhead('New challenge');
 
 form_start(CONFIG_SITE_ADMIN_RELPATH . 'actions/new_challenge');
 form_input_text('Title');
-form_textarea('Description');
+form_textarea('Description',false,true);
 
 form_textarea('Flag');
 form_input_checkbox('Automark', true);

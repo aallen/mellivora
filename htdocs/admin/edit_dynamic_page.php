@@ -18,7 +18,7 @@ menu_management();
 section_subhead('Edit dynamic page: ' . $page['title']);
 form_start(CONFIG_SITE_ADMIN_RELPATH . 'actions/edit_dynamic_page');
 form_input_text('Title', $page['title']);
-form_textarea('Body', $page['body']);
+form_textarea('Body', $page['body'], true);
 
 dynamic_visibility_select($page['visibility']);
 

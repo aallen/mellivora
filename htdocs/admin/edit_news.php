@@ -18,7 +18,7 @@ menu_management();
 section_subhead('Edit news item: ' . $news['title']);
 form_start(CONFIG_SITE_ADMIN_RELPATH . 'actions/edit_news');
 form_input_text('Title', $news['title']);
-form_textarea('Body', $news['body']);
+form_textarea('Body', $news['body'], true);
 form_hidden('action', 'edit');
 form_hidden('id', $_GET['id']);
 form_button_submit('Save changes');

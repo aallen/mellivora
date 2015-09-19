@@ -37,7 +37,7 @@ if(isset($bcc)) {
 }
 
 form_input_text('Subject');
-form_textarea('Body');
+form_textarea('Body', false, true);
 
 form_input_checkbox('HTML email');
 

@@ -102,13 +102,21 @@ function form_generic ($name, $generic) {
     ';
 }
 
-function form_textarea($name, $prefill = false) {
+function form_textarea($name, $prefill = false, $md_supported = false) {
     $name = htmlspecialchars($name);
     $field_name = strtolower(str_replace(' ','_',$name));
     echo '
     <div class="form-group">
       <label class="col-sm-2 control-label" for="',$field_name,'">',$name,'</label>
-      <div class="col-sm-10">
+      <div class="col-sm-10">';
+          if($md_supported){
+              echo '
+              <a href="https://guides.github.com/features/mastering-markdown/" target="_blank">
+                  <span class="octicon octicon-markdown"></span>
+                  Markdown supported
+              </a>';
+          }
+          echo '
           <textarea id="',$field_name,'" name="',$field_name,'" class="form-control" rows="10">',($prefill !== false ? htmlspecialchars($prefill) : ''),'</textarea>
       </div>
     </div>
