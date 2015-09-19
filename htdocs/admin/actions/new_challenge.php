@@ -9,7 +9,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     validate_xsrf_token($_POST[CONST_XSRF_TOKEN_KEY]);
 
     if ($_POST['action'] == 'new') {
-
+        $i=1;
+        while(array_key_exists('flag_'.$i,$_POST)){
+            $flags[] = $_POST['flag_'.$i];
+            $i++;
+        }
        $id = db_insert(
           'challenges',
           array(
@@ -17,7 +21,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
              'added_by'=>$_SESSION['id'],
              'title'=>$_POST['title'],
              'description'=>$_POST['description'],
-             'flag'=>$_POST['flag'],
              'automark'=>$_POST['automark'],
              'case_insensitive'=>$_POST['case_insensitive'],
              'points'=>$_POST['points'],
@@ -30,7 +33,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
        );
 
        if ($id) {
-          redirect(CONFIG_SITE_ADMIN_RELPATH . 'edit_challenge.php?id='.$id);
+           foreach($flags as $flag){
+                $flag_id = db_insert('flags',array(
+                    'challenges_id'=>$id,
+                    'flag'=>$flag
+                ));
+                if(!$flag_id){
+                    message_error('Could not insert flag into DB');
+                }
+           }
+           redirect(CONFIG_SITE_ADMIN_RELPATH . 'edit_challenge.php?id='.$id);
        } else {
           message_error('Could not insert new challenge.');
        }

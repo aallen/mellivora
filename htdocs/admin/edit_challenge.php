@@ -20,7 +20,14 @@ form_start(CONFIG_SITE_ADMIN_RELPATH . 'actions/edit_challenge');
 form_input_text('Title', $challenge['title']);
 form_textarea('Description', $challenge['description'], true);
 
-form_textarea('Flag', $challenge['flag']);
+$flags = db_select_all(
+    'flags',
+    array('id','flag'),
+    array('challenges_id'=>$_GET['id'])
+);
+
+// form_textarea('Flag', $challenge['flag']);
+form_textarea_container('Flags',$flags);
 form_input_checkbox('Automark', $challenge['automark']);
 form_input_checkbox('Case insensitive', $challenge['case_insensitive']);
 
