@@ -13,7 +13,6 @@ form_input_text('Title');
 form_textarea('Body');
 form_hidden('action', 'new');
 form_button_submit('Publish news item');
-form_bbcode_manual();
 form_end();
 
 foot();

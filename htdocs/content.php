@@ -46,12 +46,11 @@ if (cache_start($content['id'], CONFIG_CACHE_TIME_DYNAMIC, CONST_CACHE_DYNAMIC_P
 
     section_head($content['title']);
 
-    require(CONST_PATH_THIRDPARTY . 'nbbc/nbbc.php');
+    require(CONST_PATH_THIRDPARTY_COMPOSER . 'erusev/parsedown/Parsedown.php');
 
-    $bbc = new BBCode();
-    $bbc->SetEnableSmileys(false);
+    $md = new Parsedown();
 
-    echo $bbc->parse($content['body']);
+    echo $md->text($content['body']);
 
     cache_end($content['id'], CONST_CACHE_DYNAMIC_PAGES_GROUP);
 }

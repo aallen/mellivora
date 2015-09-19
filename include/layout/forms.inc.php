@@ -167,17 +167,6 @@ function form_select ($opts, $name, $value, $selected, $option, $optgroup='') {
     ';
 }
 
-function form_bbcode_manual() {
-    echo '
-    <div class="form-group">
-      <label class="col-sm-2 control-label" for="bbcode">BBcode</label>
-      <div class="col-sm-10">';
-    bbcode_manual();
-    echo '
-      </div>
-    </div>
-    ';
-}
 
 function form_logout() {
     echo '

@@ -22,7 +22,6 @@ form_textarea('Body', $news['body']);
 form_hidden('action', 'edit');
 form_hidden('id', $_GET['id']);
 form_button_submit('Save changes');
-form_bbcode_manual();
 form_end();
 
 section_subhead('Delete news item');

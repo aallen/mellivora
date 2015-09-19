@@ -78,13 +78,13 @@ function send_email (
 
         // HTML email
         if ($is_html) {
-            require(CONST_PATH_THIRDPARTY . 'nbbc/nbbc.php');
+           
+            require(CONST_PATH_THIRDPARTY_COMPOSER . 'erusev/parsedown/Parsedown.php');
+            
+            $md = new Parsedown();
 
-            $bbc = new BBCode();
-            $bbc->SetEnableSmileys(false);
-
-            // we assume the email has come to us in BBCode format
-            $mail->MsgHTML($bbc->parse($body));
+            // we assume the email has come to us in Markdown format
+            $mail->MsgHTML($md->text($body));
         }
 
         // plain old simple email
