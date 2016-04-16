@@ -6,7 +6,7 @@ login_session_refresh();
 
 send_cache_headers('scores', CONFIG_CACHE_TIME_SCORES);
 
-head('Scoreboard');
+head(lang_get('scoreboard'));
 
 if (cache_start(CONST_CACHE_NAME_SCORES, CONFIG_CACHE_TIME_SCORES)) {
 
@@ -27,9 +27,9 @@ if (cache_start(CONST_CACHE_NAME_SCORES, CONFIG_CACHE_TIME_SCORES)) {
     // no user types
     if (empty($user_types)) {
         section_head(
-            'Scoreboard',
+            lang_get('scoreboard'),
             '<a href="'.CONFIG_SITE_URL.'json?view=scoreboard">
-                <img src="'.CONFIG_SITE_URL.'img/json.png" title="View json" alt="json" class="discreet-inline small-icon" />
+                <img src="'.CONFIG_SITE_URL_STATIC_RESOURCES.'img/json.png" title="View json" alt="json" class="discreet-inline small-icon" />
             </a>',
             false
         );
@@ -58,9 +58,9 @@ if (cache_start(CONST_CACHE_NAME_SCORES, CONFIG_CACHE_TIME_SCORES)) {
     else {
         foreach ($user_types as $user_type) {
             section_head(
-                htmlspecialchars($user_type['title']) . ' scoreboard',
+                htmlspecialchars($user_type['title']) . ' ' . lang_get('scoreboard'),
                 '<a href="'.CONFIG_SITE_URL.'json?view=scoreboard&user_type='.$user_type['id'].'">
-                    <img src="'.CONFIG_SITE_URL.'img/json.png" title="View json" alt="json" class="discreet-inline small-icon" />
+                    <img src="'.CONFIG_SITE_URL_STATIC_RESOURCES.'img/json.png" title="View json" alt="json" class="discreet-inline small-icon" />
                  </a>',
                 false
             );
@@ -98,7 +98,7 @@ if (cache_start(CONST_CACHE_NAME_SCORES, CONFIG_CACHE_TIME_SCORES)) {
         <div class="col-lg-6">
         ';
 
-    section_head('Challenges');
+    section_head(lang_get('challenges'));
 
     $categories = db_query_fetch_all('
         SELECT
@@ -109,90 +109,12 @@ if (cache_start(CONST_CACHE_NAME_SCORES, CONFIG_CACHE_TIME_SCORES)) {
         FROM
            categories
         WHERE
-           available_from < '.$now.'
+           available_from < '.$now.' AND
+           exposed = 1
         ORDER BY title'
     );
 
-    foreach($categories as $category) {
-
-        echo '
-        <table class="team-table table table-striped table-hover">
-          <thead>
-            <tr>
-              <th>',htmlspecialchars($category['title']),'</th>
-              <th>Points</th>
-              <th>First solvers</th>
-            </tr>
-          </thead>
-          <tbody>
-         ';
-
-        $challenges = db_query_fetch_all('
-            SELECT
-               id,
-               title,
-               points,
-               available_from
-            FROM challenges
-            WHERE
-              available_from < '.$now.' AND category=:category
-            ORDER BY points ASC',
-            array(
-                'category'=>$category['id']
-            )
-        );
-
-        foreach($challenges as $challenge) {
-
-            echo '
-            <tr>
-                <td>
-                    <a href="challenge?id=',htmlspecialchars($challenge['id']),'">',htmlspecialchars($challenge['title']),'</a>
-                </td>
-
-                <td>
-                    ',number_format($challenge['points']),'
-                </td>
-
-                <td class="team-name">';
-
-            $users = db_query_fetch_all('
-                SELECT
-                   u.id,
-                   u.team_name
-                FROM users AS u
-                JOIN submissions AS s ON s.user_id = u.id
-                WHERE
-                   u.competing = 1 AND
-                   s.correct = 1 AND
-                   s.challenge=:challenge
-                ORDER BY s.added ASC
-                LIMIT 3',
-                array(
-                    'challenge'=>$challenge['id']
-                )
-            );
-
-            if (count($users)) {
-                $pos = 1;
-                foreach($users as $user) {
-                    echo get_position_medal($pos++),
-                    '<a href="user?id=',htmlspecialchars($user['id']),'">',htmlspecialchars($user['team_name']), '</a><br />';
-                }
-            }
-
-            else {
-                echo '<i>Unsolved</i>';
-            }
-
-            echo '
-                </td>
-            </tr>';
-        }
-        echo '
-        </tbody>
-        </table>';
-    }
+    challenges($categories);
 
     echo '
         </div> <!-- / span6 -->

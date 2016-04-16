@@ -15,12 +15,12 @@ if (empty($categories)) {
     message_generic('Welcome', 'Your CTF is looking a bit empty! Start by adding a category using the menu above.');
 }
 
-section_subhead('CTF Overview');
+section_subhead('CTF Overview', '<a href="'.CONFIG_SITE_ADMIN_URL.'visualise">Visualise challenge availability</a>', false);
 
 foreach($categories as $category) {
     echo '
     <h4>
-    ',htmlspecialchars($category['title']), '
+    ',htmlspecialchars($category['title']),'
     <a href="edit_category.php?id=',htmlspecialchars($category['id']), '" class="btn btn-xs btn-primary">Edit category</a>
     <a href="new_challenge.php?category=',htmlspecialchars($category['id']),'" class="btn btn-xs btn-primary">Add challenge</a>
     </h4>
@@ -32,6 +32,7 @@ foreach($categories as $category) {
             'id',
             'title',
             'description',
+            'exposed',
             'available_from',
             'available_until',
             'points'
@@ -50,8 +51,9 @@ foreach($categories as $category) {
         <tr>
           <th>Title</th>
           <th>Description</th>
-          <th>Points</th>
-          <th>Manage</th>
+          <th class="center">Points</th>
+          <th class="center">Visibility</th>
+          <th class="center">Manage</th>
         </tr>
       </thead>
       <tbody>
@@ -62,8 +64,25 @@ foreach($categories as $category) {
         <tr>
           <td>', htmlspecialchars($challenge['title']), '</td>
           <td>', htmlspecialchars(short_description($challenge['description'], 50)), '</td>
-          <td>', number_format($challenge['points']), '</td>
-          <td>
+          <td class="center">', number_format($challenge['points']), '</td>
+          <td class="center">
+
+            ', get_availability_icons(
+                $category['exposed'],
+                $category['available_from'],
+                $category['available_until'],
+                'Category'
+            ),'
+
+            ', get_availability_icons(
+                $challenge['exposed'],
+                $challenge['available_from'],
+                $challenge['available_until'],
+                'Challenge'
+            ),'
+
+          </td>
+          <td class="center">
             <a href="edit_challenge.php?id=', htmlspecialchars($challenge['id']), '" class="btn btn-xs btn-primary">Edit</a>
             <a href="new_hint.php?id=', htmlspecialchars($challenge['id']), '" class="btn btn-xs btn-warning">Hint</a>
           </td>

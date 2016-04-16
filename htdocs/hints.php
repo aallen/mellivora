@@ -4,7 +4,7 @@ require('../include/mellivora.inc.php');
 
 enforce_authentication();
 
-head('Hints');
+head(lang_get('hints'));
 
 if (cache_start(CONST_CACHE_NAME_HINTS, CONFIG_CACHE_TIME_HINTS)) {
 
@@ -18,12 +18,21 @@ if (cache_start(CONST_CACHE_NAME_HINTS, CONFIG_CACHE_TIME_HINTS)) {
         FROM hints AS h
         LEFT JOIN challenges AS c ON c.id = h.challenge
         LEFT JOIN categories AS ca ON ca.id = c.category
-        WHERE c.available_from < UNIX_TIMESTAMP() AND c.available_until > UNIX_TIMESTAMP() AND h.visible = 1
+        WHERE
+          c.available_from < UNIX_TIMESTAMP() AND
+          c.available_until > UNIX_TIMESTAMP() AND
+          h.visible = 1 AND
+          c.exposed = 1 AND
+          ca.exposed = 1
         ORDER BY h.id DESC
     ');
 
     if (!count($hints)) {
-        message_generic("Hints", "No hints have been made available yet.", false);
+        message_generic(
+            lang_get('hints'),
+            lang_get('no_hints_available'),
+            false
+        );
     }
 
     section_head('Hints');
@@ -32,10 +41,10 @@ if (cache_start(CONST_CACHE_NAME_HINTS, CONFIG_CACHE_TIME_HINTS)) {
         <table id="files" class="table table-striped table-hover">
           <thead>
             <tr>
-              <th>Category</th>
-              <th>Challenge</th>
-              <th>Added</th>
-              <th>Hint</th>
+              <th>',lang_get('category'),'</th>
+              <th>',lang_get('challenge'),'</th>
+              <th>',lang_get('added'),'</th>
+              <th>',lang_get('hint'),'</th>
             </tr>
           </thead>
           <tbody>

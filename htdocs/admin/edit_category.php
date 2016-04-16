@@ -12,13 +12,22 @@ $category = db_select_one(
     array('id' => $_GET['id'])
 );
 
+if (empty($category)) {
+    message_error('No category found with this ID');
+}
+
 head('Site management');
 menu_management();
 
 section_subhead('Edit category: ' . $category['title']);
 form_start(CONFIG_SITE_ADMIN_RELPATH . 'actions/edit_category');
 form_input_text('Title', $category['title']);
+<<<<<<< HEAD
 form_textarea('Description', $category['description'],true);
+=======
+form_textarea('Description', $category['description']);
+form_input_checkbox('Exposed', $category['exposed']);
+>>>>>>> Nakiami/master
 form_input_text('Available from', date_time($category['available_from']));
 form_input_text('Available until', date_time($category['available_until']));
 form_hidden('action', 'edit');

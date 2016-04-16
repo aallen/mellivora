@@ -91,7 +91,7 @@ body {
     border-radius: 4px;
 }
 
-#menu-main input {
+#menu-main button {
     background: none;
     border: none;
     padding: 0;
@@ -169,6 +169,11 @@ body {
     margin-top: 0;
     margin-bottom: 0;
     vertical-align: top;
+}
+
+#visualise-competition {
+    width: 1000px;
+    height: 700px;
 }
 
 /* Responsive: Portrait tablets and up */
@@ -352,8 +357,60 @@ body {
     text-overflow: ellipsis;
 }
 
+.glyphicon {
+    opacity: 0.8;
+}
+
 pre {
     font-size: 8pt;
     overflow: auto;
     line-height: 100%;
+}
+
+.inline-pre {
+    display: inline;
+    padding: 2px;
+}
+
+.center {
+    text-align: center;
+}
+
+.red {
+    color: red;
+}
+
+/** Messages / modal dialogs **/
+
+.modal.challenge-attempt .modal-header {
+    background: no-repeat 50% 3px;
+    background-size: 70px;
+    border-radius: 6px 6px 0 0;
+    border-bottom: 2px solid;
+    color: white;
+    min-height: 70px;
+}
+
+.modal.challenge-attempt.incorrect .modal-header {
+    background-image: url('../img/padlock_white.svg');
+    border-bottom-color: #C14444;
+    background-color: #E75353;
+}
+
+.modal.challenge-attempt.correct .modal-header {
+    background-image: url('../img/flag_white.svg');
+    border-bottom-color: #47ac41;
+    background-color: #a8d68e;
+}
+
+.modal.challenge-attempt button {
+    float: right;
+}
+
+.modal.challenge-attempt p {
+    float: left;
+}
+
+.modal.challenge-attempt .modal-body {
+    overflow: auto;
 }

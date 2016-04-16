@@ -15,6 +15,7 @@ function send_email (
     $mail = new PHPMailer();
     $mail->IsHTML($is_html);
     $mail->XMailer = ' ';
+    $mail->CharSet = 'UTF-8';
 
     $successfully_sent_to = array();
 
@@ -140,7 +141,7 @@ function validate_email ($email) {
     if (!valid_email($email)) {
         log_exception(new Exception('Invalid Email'));
 
-        message_error('That doesn\'t look like an email. Please go back and double check the form.');
+        message_error(lang_get('not_a_valid_email'));
     }
 }
 

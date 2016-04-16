@@ -15,10 +15,11 @@ echo '
           <th>Team</th>
           <th>Email</th>
           <th>Added</th>
-          <th>Class</th>
-          <th>Enabled</th>
-          <th>Num IPs</th>
-          <th>Manage</th>
+          <th>Last active</th>
+          <th class="center">Class</th>
+          <th class="center">Enabled</th>
+          <th class="center">Num IPs</th>
+          <th class="center">Manage</th>
         </tr>
       </thead>
       <tbody>
@@ -52,6 +53,7 @@ $users = db_query_fetch_all('
        u.email,
        u.team_name,
        u.added,
+       u.last_active,
        u.class,
        u.enabled,
        co.country_name,
@@ -78,14 +80,15 @@ foreach($users as $user) {
     <tr>
         <td>
             ',country_flag_link($user['country_name'], $user['country_code']),'
-            <a href="',CONFIG_SITE_URL,'user?id=',htmlspecialchars($user['id']),'">',htmlspecialchars($user['team_name']),'</a>
+            <a href="',CONFIG_SITE_ADMIN_URL,'user?id=',htmlspecialchars($user['id']),'">',htmlspecialchars($user['team_name']),'</a>
         </td>
         <td><a href="',CONFIG_SITE_ADMIN_URL,'new_email.php?to=',htmlspecialchars($user['email']),'">',htmlspecialchars($user['email']),'</a></td>
         <td>',date_time($user['added']),'</td>
-        <td>',user_class_name($user['class']),'</td>
-        <td>',($user['enabled'] ? 'Yes' : 'No'),'</td>
-        <td><a href="',CONFIG_SITE_ADMIN_URL,'list_ip_log.php?id=',htmlspecialchars($user['id']),'">',number_format($user['num_ips']), '</a></td>
-        <td>
+        <td>',($user['last_active'] ? date_time($user['last_active']) : '<i>Never</i>'),'</td>
+        <td class="center">',user_class_name($user['class']),'</td>
+        <td class="center">',($user['enabled'] ? '<span class="glyphicon glyphicon-ok"></span>' : '<span class="glyphicon glyphicon-remove red"></span>'),'</td>
+        <td class="center"><a href="',CONFIG_SITE_ADMIN_URL,'list_ip_log.php?user_id=',htmlspecialchars($user['id']),'">',number_format($user['num_ips']), '</a></td>
+        <td class="center">
             <a href="',CONFIG_SITE_ADMIN_URL,'edit_user.php?id=',htmlspecialchars($user['id']),'" class="btn btn-xs btn-primary">Edit</a>
         </td>
     </tr>

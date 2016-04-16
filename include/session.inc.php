@@ -27,36 +27,44 @@ function user_is_staff () {
 function user_class_name ($class) {
     switch ($class) {
         case CONST_USER_CLASS_MODERATOR:
-            return 'Moderator';
+            return lang_get('user_class_moderator');
         case CONST_USER_CLASS_USER:
-            return 'User';
+            return lang_get('user_class_user');
     }
 
-    return 'Unknown user class';
+    log_exception(new Exception('User with unknown class: ' . $class));
+
+    message_generic_error();
 }
 
 function login_session_refresh($force_user_data_reload = false) {
     // force a database reload of user data
-    if (user_is_logged_in() && $force_user_data_reload) {
+    if (user_is_logged_in()) {
 
-        $user = db_select_one(
-            'users',
-            array(
-                'id',
-                'class',
-                'enabled',
-                '2fa_status'
-            ),
-            array(
-                'id'=>$_SESSION['id']
-            )
-        );
+        update_user_last_active_time($_SESSION['id']);
 
-        if ($_SESSION['2fa_status'] == 'authenticated') {
-            $user['2fa_status'] = $_SESSION['2fa_status'];
+        if ($force_user_data_reload) {
+
+            $user = db_select_one(
+                'users',
+                array(
+                    'id',
+                    'class',
+                    'enabled',
+                    '2fa_status',
+                    'download_key'
+                ),
+                array(
+                    'id' => $_SESSION['id']
+                )
+            );
+
+            if ($_SESSION['2fa_status'] == 'authenticated') {
+                $user['2fa_status'] = $_SESSION['2fa_status'];
+            }
+
+            login_session_create($user);
         }
-
-        login_session_create($user);
     }
 
     // if users session has expired, but they have the "remember me" cookie
@@ -80,6 +88,7 @@ function login_create($email, $password, $remember_me) {
         array(
             'id',
             'passhash',
+            'download_key',
             'class',
             'enabled',
             '2fa_status'
@@ -116,7 +125,10 @@ function login_session_create($user) {
     $_SESSION['class'] = $user['class'];
     $_SESSION['enabled'] = $user['enabled'];
     $_SESSION['2fa_status'] = $user['2fa_status'];
+    $_SESSION['download_key'] = $user['download_key'];
     $_SESSION['fingerprint'] = get_fingerprint();
+
+    update_user_last_active_time($user['id']);
 }
 
 function regenerate_tokens() {
@@ -255,7 +267,8 @@ function login_session_create_from_login_cookie() {
             'id',
             'class',
             'enabled',
-            '2fa_status'
+            '2fa_status',
+            'download_key'
         ),
         array(
             'id'=>$cookie_token_entry['user_id']
@@ -281,13 +294,29 @@ function login_session_create_from_login_cookie() {
     regenerate_tokens();
 }
 
-function log_user_ip($userId) {
+function update_user_last_active_time($user_id) {
 
-    if (!$userId) {
-        message_error('No user ID was supplied to the IP logging function');
+    validate_id($user_id);
+
+    $now = time();
+
+    if (!array_get($_SESSION, 'last_active') || $now - $_SESSION['last_active'] > CONST_USER_MIN_SECONDS_BETWEEN_ACTIVITY_LOG) {
+
+        db_update(
+            'users',
+            array('last_active' => $now),
+            array('id' => $user_id)
+        );
+
+        $_SESSION['last_active'] = $now;
     }
+}
 
-    $time = time();
+function log_user_ip($user_id) {
+
+    validate_id($user_id);
+
+    $now = time();
     $ip = get_ip(true);
 
     $entry = db_select_one(
@@ -297,7 +326,7 @@ function log_user_ip($userId) {
             'times_used'
         ),
         array(
-            'user_id'=>$userId,
+            'user_id'=>$user_id,
             'ip'=>$ip
         )
     );
@@ -322,9 +351,9 @@ function log_user_ip($userId) {
         db_insert(
             'ip_log',
             array(
-                'added'=>$time,
-                'last_used'=>$time,
-                'user_id'=>$userId,
+                'added'=>$now,
+                'last_used'=>$now,
+                'user_id'=>$user_id,
                 'ip'=>$ip
             )
         );
@@ -349,6 +378,15 @@ function check_passhash($password, $hash) {
 
 function get_fingerprint() {
     return md5(get_ip());
+}
+
+function get_user_download_key() {
+    if (user_is_logged_in()) {
+        if (!isset($_SESSION['download_key'])) {
+            login_session_refresh(true);
+        }
+        return $_SESSION['download_key'];
+    }
 }
 
 function login_session_destroy () {
@@ -394,25 +432,25 @@ function logout() {
 function register_account($email, $password, $team_name, $country, $type = null) {
 
     if (!CONFIG_ACCOUNTS_SIGNUP_ALLOWED) {
-        message_error('Registration is currently closed.');
+        message_error(lang_get('registration_closed'));
     }
 
     if (empty($email) || empty($password) || empty($team_name)) {
-        message_error('Please fill in all the details correctly.');
+        message_error(lang_get('please_fill_details_correctly'));
     }
 
     if (isset($type) && !is_valid_id($type)) {
-        message_error('That does not look like a valid team type.');
+        message_error(lang_get('invalid_team_type'));
     }
 
     if (strlen($team_name) > CONFIG_MAX_TEAM_NAME_LENGTH || strlen($team_name) < CONFIG_MIN_TEAM_NAME_LENGTH) {
-        message_error('Your team name was too long or too short.');
+        message_error('team_name_too_long_or_short');
     }
 
     validate_email($email);
 
     if (!allowed_email($email)) {
-        message_error('Email not on whitelist. Please choose a whitelisted email or contact organizers.');
+        message_error(lang_get('email_not_whitelisted'));
     }
 
     $num_countries = db_select_one(
@@ -421,7 +459,7 @@ function register_account($email, $password, $team_name, $country, $type = null)
     );
 
     if (!isset($country) || !is_valid_id($country) || $country > $num_countries['num']) {
-        message_error('Please select a valid country.');
+        message_error(lang_get('please_supply_country_code'));
     }
 
     $user = db_select_one(
@@ -436,7 +474,7 @@ function register_account($email, $password, $team_name, $country, $type = null)
     );
 
     if ($user['id']) {
-        message_error('An account with this team name or email already exists.');
+        message_error(lang_get('user_already_exists'));
     }
 
     $user_id = db_insert(
@@ -444,6 +482,7 @@ function register_account($email, $password, $team_name, $country, $type = null)
         array(
             'email'=>$email,
             'passhash'=>make_passhash($password),
+            'download_key'=>hash('sha256', generate_random_string(128)),
             'team_name'=>$team_name,
             'added'=>time(),
             'enabled'=>(CONFIG_ACCOUNTS_DEFAULT_ENABLED ? '1' : '0'),
@@ -459,41 +498,34 @@ function register_account($email, $password, $team_name, $country, $type = null)
         log_user_ip($user_id);
 
         // signup email
-        $email_subject = CONFIG_SITE_NAME . ' account details';
+        $email_subject = lang_get('signup_email_subject', array('site_name' => CONFIG_SITE_NAME));
         // body
-        $email_body = htmlspecialchars($team_name).', your registration at '.CONFIG_SITE_NAME.' was successful.'.
-            "\r\n".
-            "\r\n".
-            (
-                CONFIG_ACCOUNTS_DEFAULT_ENABLED ?
-                'You can now log in using your email and chosen password.' :
-                'Once the competition starts, please use this email address to log in.'
-            ).
-            "\r\n";
-
-        if (CONFIG_ACCOUNTS_EMAIL_PASSWORD_ON_SIGNUP) {
-            $email_body .= 'Your password is: ' . $password .
-            "\r\n";
-        }
-
-        $email_body .=
-            "\r\n".
-            'Please stay tuned for updates!'.
-            "\r\n".
-            "\r\n".
-            'Regards,'.
-            "\r\n".
-            CONFIG_SITE_NAME;
+        $email_body = lang_get(
+            'signup_email_success',
+            array(
+                'team_name' => htmlspecialchars($team_name),
+                'site_name' => CONFIG_SITE_NAME,
+                'signup_email_availability' => CONFIG_ACCOUNTS_DEFAULT_ENABLED ?
+                    lang_get('signup_email_account_availability_message_login_now') :
+                    lang_get('signup_email_account_availability_message_login_later'),
+                'signup_email_password' => CONFIG_ACCOUNTS_EMAIL_PASSWORD_ON_SIGNUP ?
+                    lang_get('your_password_is') . ': ' . $password :
+                    lang_get('your_password_was_set')
+            )
+        );
 
         // send details to user
         send_email(array($email), $email_subject, $email_body);
 
         // if account isn't enabled by default, display message and die
         if (!CONFIG_ACCOUNTS_DEFAULT_ENABLED) {
-            message_generic('Signup successful', 'Thank you for registering!
-            Your chosen email is: ' . htmlspecialchars($email) . '.
-            Make sure to check your spam folder as emails from us may be placed into it.
-            Please stay tuned for updates!');
+            message_generic(
+                lang_get('signup_successful'),
+                lang_get(
+                    'signup_successful_text',
+                    array('email' => htmlspecialchars($email))
+                )
+            );
         } else {
             return true;
         }

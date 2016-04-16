@@ -2,6 +2,7 @@
 require(CONST_PATH_LAYOUT . 'login_dialog.inc.php');
 require(CONST_PATH_LAYOUT . 'messages.inc.php');
 require(CONST_PATH_LAYOUT . 'scores.inc.php');
+require(CONST_PATH_LAYOUT . 'user.inc.php');
 require(CONST_PATH_LAYOUT . 'forms.inc.php');
 require(CONST_PATH_LAYOUT . 'challenges.inc.php');
 require(CONST_PATH_LAYOUT . 'dynamic.inc.php');
@@ -20,12 +21,17 @@ function head($title = '') {
     <title>',($title ? htmlspecialchars($title) . ' : ' : '') , CONFIG_SITE_NAME, ' - ', CONFIG_SITE_SLOGAN,'</title>
     <meta name="description" content="',CONFIG_SITE_DESCRIPTION,'">
     <meta name="author" content="">
-    <link rel="icon" href="',CONFIG_SITE_URL,'img/favicon.png" type="image/png" />
+    <link rel="icon" href="',CONFIG_SITE_URL_STATIC_RESOURCES,'img/favicon.png" type="image/png" />
 
     <!-- CSS -->
+<<<<<<< HEAD
     <link href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
     <link href="',CONFIG_SITE_URL,'css/mellivora.css" rel="stylesheet">
     <link href="',CONFIG_SITE_URL,'css/octicons/octicons.css" rel="stylesheet">';
+=======
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="',CONFIG_SITE_URL_STATIC_RESOURCES,'css/mellivora.css" rel="stylesheet">';
+>>>>>>> Nakiami/master
 
     js_global_dict();
 
@@ -55,8 +61,8 @@ echo '
             <div id="header-logo">
                 <a href="',CONFIG_SITE_URL,'">
                     <h3 id="site-logo-text">',CONFIG_SITE_NAME,'</h3>
-                    <div id="site-logo"/>
-                        <object data="../img/mellivora.svg" type="image/svg+xml"></object>
+                    <div id="site-logo">
+                        <object data="'.CONFIG_SITE_URL_STATIC_RESOURCES.'img/mellivora.svg" type="image/svg+xml"></object>
                     </div>
                 </a>
             </div>
@@ -66,26 +72,26 @@ echo '
                     if (user_is_logged_in()) {
 
                         if (user_is_staff()) {
-                            echo '<li><a href="',CONFIG_SITE_ADMIN_URL,'">Manage</a></li>';
+                            echo '<li><a href="',CONFIG_SITE_ADMIN_URL,'">',lang_get('manage'),'</a></li>';
                         }
 
                         echo '
-                            <li><a href="',CONFIG_SITE_URL,'home">Home</a></li>
-                            <li><a href="',CONFIG_SITE_URL,'challenges">Challenges</a></li>
-                            <li><a href="',CONFIG_SITE_URL,'hints">Hints</a></li>
-                            <li><a href="',CONFIG_SITE_URL,'scores">Scores</a></li>
-                            <li><a href="',CONFIG_SITE_URL,'profile">Profile</a></li>
+                            <li><a href="',CONFIG_SITE_URL,'home">',lang_get('home'),'</a></li>
+                            <li><a href="',CONFIG_SITE_URL,'challenges">',lang_get('challenges'),'</a></li>
+                            <li><a href="',CONFIG_SITE_URL,'hints">',lang_get('hints'),'</a></li>
+                            <li><a href="',CONFIG_SITE_URL,'scores">',lang_get('scores'),'</a></li>
+                            <li><a href="',CONFIG_SITE_URL,'profile">',lang_get('profile'),'</a></li>
                             ',dynamic_menu_content(),'
                             <li>',form_logout(),'</li>
                             ';
 
                     } else {
                         echo '
-                            <li><a href="',CONFIG_SITE_URL,'home">Home</a></li>
-                            <li><a href="',CONFIG_SITE_URL,'scores">Scores</a></li>
+                            <li><a href="',CONFIG_SITE_URL,'home">',lang_get('home'),'</a></li>
+                            <li><a href="',CONFIG_SITE_URL,'scores">',lang_get('scoreboard'),'</a></li>
                             ',dynamic_menu_content(),'
-                            <li><a href="',CONFIG_SITE_URL,'register">Register</a></li>
-                            <li><a href="" data-toggle="modal" data-target="#login-dialog">Log in</a></li>
+                            <li><a href="',CONFIG_SITE_URL,'register">',lang_get('register'),'</a></li>
+                            <li><a href="" data-toggle="modal" data-target="#login-dialog">',lang_get('log_in'),'</a></li>
                         ';
                     }
                     echo '
@@ -100,11 +106,11 @@ echo '
         ';
 
     if (isset($_GET['generic_success'])) {
-        message_inline_green('<h3>Success!</h3>', false);
+        message_inline_green('<h3>'.lang_get('action_success').'</h3>', false);
     } else if (isset($_GET['generic_failure'])) {
-        message_inline_red('<h3>Failure!</h3>', false);
+        message_inline_red('<h3>'.lang_get('action_failure').'</h3>', false);
     } else if (isset($_GET['generic_warning'])) {
-        message_inline_red('<h3>Something went wrong! Most likely the action you attempted has failed.</h3>', false);
+        message_inline_red('<h3>',lang_get('action_something_went_wrong'),'</h3>', false);
     }
 
     $head_sent = true;
@@ -120,7 +126,7 @@ function foot () {
 <div id="footer">
     <div class="fade">
         <div id="footer-logo"/>
-            <object data="../img/mellivora.svg" type="image/svg+xml"></object>
+            <object data="'.CONFIG_SITE_URL_STATIC_RESOURCES.'img/mellivora.svg" type="image/svg+xml"></object>
         </div>
         <p>Powered by <a href="https://github.com/Nakiami/mellivora">Mellivora</a></p>
     </div>
@@ -131,8 +137,12 @@ function foot () {
 <!-- JS -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<<<<<<< HEAD
 <script type="text/javascript" src="',CONFIG_SITE_URL,'js/mellivora.js"></script>
 <script type="text/javascript" src="',CONFIG_SITE_URL,'js/forms.js"></script>
+=======
+<script type="text/javascript" src="',CONFIG_SITE_URL_STATIC_RESOURCES,'js/mellivora.js"></script>
+>>>>>>> Nakiami/master
 
 </body>
 </html>';
@@ -162,98 +172,98 @@ function menu_management () {
     echo '
 <div id="menu-management">
     <div class="btn-group">
-        <button class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown">News <span class="caret"></span></button>
+        <button class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown">', lang_get('news'), ' <span class="caret"></span></button>
         <ul class="dropdown-menu">
-          <li><a href="',CONFIG_SITE_ADMIN_URL,'new_news">Add news item</a></li>
-          <li><a href="',CONFIG_SITE_ADMIN_URL,'list_news">List news items</a></li>
+          <li><a href="',CONFIG_SITE_ADMIN_URL,'new_news" id="ssssssd">', lang_get('add_news_item'), '</a></li>
+          <li><a href="',CONFIG_SITE_ADMIN_URL,'list_news">', lang_get('list_news_item'), '</a></li>
         </ul>
     </div>
 
     <div class="btn-group">
-        <button class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown">Categories <span class="caret"></span></button>
+        <button class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown">', lang_get('categories'), ' <span class="caret"></span></button>
         <ul class="dropdown-menu">
-          <li><a href="',CONFIG_SITE_ADMIN_URL,'new_category">Add category</a></li>
-          <li><a href="',CONFIG_SITE_ADMIN_URL,'">List categories</a></li>
+          <li><a href="',CONFIG_SITE_ADMIN_URL,'new_category">', lang_get('add_category'), '</a></li>
+          <li><a href="',CONFIG_SITE_ADMIN_URL,'">', lang_get('list_categories'), '</a></li>
         </ul>
     </div>
 
     <div class="btn-group">
-        <button class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown">Challenges <span class="caret"></span></button>
+        <button class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown">', lang_get('challenges'), ' <span class="caret"></span></button>
         <ul class="dropdown-menu">
-          <li><a href="',CONFIG_SITE_ADMIN_URL,'new_challenge">Add challenge</a></li>
-          <li><a href="',CONFIG_SITE_ADMIN_URL,'">List challenges</a></li>
+          <li><a href="',CONFIG_SITE_ADMIN_URL,'new_challenge">', lang_get('add_challenge'), '</a></li>
+          <li><a href="',CONFIG_SITE_ADMIN_URL,'">', lang_get('list_challenges'), '</a></li>
         </ul>
     </div>
 
     <div class="btn-group">
-        <button class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown">Submissions <span class="caret"></span></button>
+        <button class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown">', lang_get('submissions'), ' <span class="caret"></span></button>
         <ul class="dropdown-menu">
-          <li><a href="',CONFIG_SITE_ADMIN_URL,'list_submissions">List submissions in need of marking</a></li>
-          <li><a href="',CONFIG_SITE_ADMIN_URL,'list_submissions?all=1">List all submissions</a></li>
+          <li><a href="',CONFIG_SITE_ADMIN_URL,'list_submissions?only_needing_marking=1">', lang_get('list_submissions_in_need_of_marking'), '</a></li>
+          <li><a href="',CONFIG_SITE_ADMIN_URL,'list_submissions">', lang_get('list_all_submissions'), '</a></li>
         </ul>
     </div>
 
 
     <div class="btn-group">
-        <button class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown">Users <span class="caret"></span></button>
+        <button class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown">', lang_get('users'), '  <span class="caret"></span></button>
         <ul class="dropdown-menu">
-          <li role="presentation" class="dropdown-header">Users</li>
-          <li><a href="',CONFIG_SITE_ADMIN_URL,'list_users">List users</a></li>
-          <li role="presentation" class="dropdown-header">User types</li>
-          <li><a href="',CONFIG_SITE_ADMIN_URL,'new_user_type">Add user type</a></li>
-          <li><a href="',CONFIG_SITE_ADMIN_URL,'list_user_types">List user types</a></li>
+          <li role="presentation" class="dropdown-header">', lang_get('users'), ' </li>
+          <li><a href="',CONFIG_SITE_ADMIN_URL,'list_users">', lang_get('list_users'), ' </a></li>
+          <li role="presentation" class="dropdown-header">', lang_get('user_types'), ' </li>
+          <li><a href="',CONFIG_SITE_ADMIN_URL,'new_user_type">', lang_get('add_user_type'), ' </a></li>
+          <li><a href="',CONFIG_SITE_ADMIN_URL,'list_user_types">', lang_get('list_user_types'), ' </a></li>
         </ul>
     </div>
 
     <div class="btn-group">
-        <button class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown">Signup rules <span class="caret"></span></button>
+        <button class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown">', lang_get('signup_rules'), ' <span class="caret"></span></button>
         <ul class="dropdown-menu">
-          <li><a href="',CONFIG_SITE_ADMIN_URL,'new_restrict_email">New rule</a></li>
-          <li><a href="',CONFIG_SITE_ADMIN_URL,'list_restrict_email">List rules</a></li>
-          <li><a href="',CONFIG_SITE_ADMIN_URL,'test_restrict_email">Test rule</a></li>
+          <li><a href="',CONFIG_SITE_ADMIN_URL,'new_restrict_email">', lang_get('new_rule'), '</a></li>
+          <li><a href="',CONFIG_SITE_ADMIN_URL,'list_restrict_email">', lang_get('list_rules'), '</a></li>
+          <li><a href="',CONFIG_SITE_ADMIN_URL,'test_restrict_email">', lang_get('test_rule'), '</a></li>
         </ul>
     </div>
 
     <div class="btn-group">
         <button class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown">Email <span class="caret"></span></button>
         <ul class="dropdown-menu">
-          <li><a href="',CONFIG_SITE_ADMIN_URL,'new_email">Single email</a></li>
-          <li><a href="',CONFIG_SITE_ADMIN_URL,'new_email?bcc=all">Email all users</a></li>
+          <li><a href="',CONFIG_SITE_ADMIN_URL,'new_email">', lang_get('single_email'), '</a></li>
+          <li><a href="',CONFIG_SITE_ADMIN_URL,'new_email?bcc=all">', lang_get('email_all_users'), '</a></li>
         </ul>
     </div>
 
     <div class="btn-group">
-        <button class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown">Hints <span class="caret"></span></button>
+        <button class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown">', lang_get('hints'), ' <span class="caret"></span></button>
         <ul class="dropdown-menu">
-          <li><a href="',CONFIG_SITE_ADMIN_URL,'new_hint">New hint</a></li>
-          <li><a href="',CONFIG_SITE_ADMIN_URL,'list_hints">List hints</a></li>
+          <li><a href="',CONFIG_SITE_ADMIN_URL,'new_hint">', lang_get('new_hint'), '</a></li>
+          <li><a href="',CONFIG_SITE_ADMIN_URL,'list_hints">', lang_get('list_hints'), '</a></li>
         </ul>
     </div>
 
     <div class="btn-group">
-        <button class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown">Dynamic content <span class="caret"></span></button>
+        <button class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown"> ', lang_get('dynamic_content'), '<span class="caret"></span></button>
         <ul class="dropdown-menu">
-          <li role="presentation" class="dropdown-header">Menu</li>
-          <li><a href="',CONFIG_SITE_ADMIN_URL,'new_dynamic_menu_item">New menu item</a></li>
-          <li><a href="',CONFIG_SITE_ADMIN_URL,'list_dynamic_menu">List menu items</a></li>
-          <li role="presentation" class="dropdown-header">Pages</li>
-          <li><a href="',CONFIG_SITE_ADMIN_URL,'new_dynamic_page">New page</a></li>
-          <li><a href="',CONFIG_SITE_ADMIN_URL,'list_dynamic_pages">List pages</a></li>
+          <li role="presentation" class="dropdown-header">', lang_get('menu'), '</li>
+          <li><a href="',CONFIG_SITE_ADMIN_URL,'new_dynamic_menu_item">', lang_get('new_menu_item'), '</a></li>
+          <li><a href="',CONFIG_SITE_ADMIN_URL,'list_dynamic_menu">', lang_get('list_menu_items'), '</a></li>
+          <li role="presentation" class="dropdown-header">', lang_get('pages'), '</li>
+          <li><a href="',CONFIG_SITE_ADMIN_URL,'new_dynamic_page">', lang_get('new_page'), '</a></li>
+          <li><a href="',CONFIG_SITE_ADMIN_URL,'list_dynamic_pages">', lang_get('list_pages'), '</a></li>
         </ul>
     </div>
 
     <div class="btn-group">
-        <button class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown">Exceptions <span class="caret"></span></button>
+        <button class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown">', lang_get('exceptions'), ' <span class="caret"></span></button>
         <ul class="dropdown-menu">
-          <li><a href="',CONFIG_SITE_ADMIN_URL,'list_exceptions">List exceptions</a></li>
-          <li><a href="',CONFIG_SITE_ADMIN_URL,'edit_exceptions">Clear exceptions</a></li>
+          <li><a href="',CONFIG_SITE_ADMIN_URL,'list_exceptions">', lang_get('list_exceptions'), '</a></li>
+          <li><a href="',CONFIG_SITE_ADMIN_URL,'edit_exceptions">', lang_get('clear_exceptions'), '</a></li>
         </ul>
     </div>
     
     <div class="btn-group">
-        <button class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown">Search <span class="caret"></span></button>
+        <button class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown">', lang_get('search'), ' <span class="caret"></span></button>
         <ul class="dropdown-menu">
-          <li><a href="',CONFIG_SITE_ADMIN_URL,'search">Search</a></li>
+          <li><a href="',CONFIG_SITE_ADMIN_URL,'search">', lang_get('search'), '</a></li>
         </ul>
     </div>
 </div>
@@ -304,7 +314,7 @@ function country_flag_link($country_name, $country_code, $return = false) {
 
     $flag_link = '
     <a href="country?code='.htmlspecialchars($country_code).'">
-        <img src="'.CONFIG_SITE_URL.'img/flags/'.$country_code.'.png" alt="'.$country_code.'" title="'.$country_name.'" />
+        <img src="'.CONFIG_SITE_URL_STATIC_RESOURCES.'img/flags/'.$country_code.'.png" class="has-tooltip" data-toggle="tooltip" data-placement="right" alt="'.$country_code.'" title="'.$country_name.'" />
     </a>';
 
     if ($return) {
@@ -314,107 +324,20 @@ function country_flag_link($country_name, $country_code, $return = false) {
     echo $flag_link;
 }
 
-function user_ip_log($user_id) {
-
-    validate_id($user_id);
-
-    echo '
-        <table id="files" class="table table-striped table-hover">
-          <thead>
-            <tr>
-              <th>IP</th>
-              <th>Hostname</th>
-              <th>First used</th>
-              <th>Last used</th>
-              <th>Times used</th>
-            </tr>
-          </thead>
-          <tbody>
-        ';
-
-    $entries = db_select_all(
-        'ip_log',
-        array(
-            'INET_NTOA(ip) AS ip',
-            'added',
-            'last_used',
-            'times_used'
-        ),
-        array('user_id' => $_GET['id'])
-    );
-
-    foreach($entries as $entry) {
-        echo '
-        <tr>
-            <td><a href="list_ip_log.php?ip=',htmlspecialchars($entry['ip']),'">',htmlspecialchars($entry['ip']),'</a></td>
-            <td>',(CONFIG_GET_IP_HOST_BY_ADDRESS ? gethostbyaddr($entry['ip']) : '<i>Lookup disabled in config</i>'),'</td>
-            <td>',date_time($entry['added']),'</td>
-            <td>',date_time($entry['last_used']),'</td>
-            <td>',number_format($entry['times_used']),'</td>
-        </tr>
-        ';
+function pager_filter_from_get($get) {
+    if (array_get($get, 'from') != null) {
+        unset($get['from']);
     }
-
-    echo '
-          </tbody>
-        </table>
-         ';
-}
-
-function user_exception_log($user_id, $limit = null) {
-
-    validate_id($user_id);
-
-    echo '
-    <table id="hints" class="table table-striped table-hover">
-      <thead>
-        <tr>
-          <th>Message</th>
-          <th>Added</th>
-          <th>IP</th>
-          <th>Trace</th>
-        </tr>
-      </thead>
-      <tbody>
-    ';
-
-    $exceptions = db_query_fetch_all('
-        SELECT
-           e.id,
-           e.message,
-           e.added,
-           e.added_by,
-           e.trace,
-           INET_NTOA(e.user_ip) AS user_ip,
-           u.team_name
-        FROM exceptions AS e
-        LEFT JOIN users AS u ON u.id = e.added_by
-        WHERE e.added_by = :user_id
-        ORDER BY e.id DESC
-        '.($limit ? 'LIMIT '.$limit : ''),
-        array(
-            'user_id'=>$user_id
-        )
-    );
-
-    foreach($exceptions as $exception) {
-        echo '
-    <tr>
-        <td>',htmlspecialchars($exception['message']),'</td>
-        <td>',date_time($exception['added']),'</td>
-        <td><a href="',CONFIG_SITE_ADMIN_URL,'list_ip_log.php?ip=',htmlspecialchars($exception['user_ip']),'">',htmlspecialchars($exception['user_ip']),'</a></td>
-        <td>',htmlspecialchars($exception['trace']),'</td>
-    </tr>
-    ';
-    }
-
-    echo '
-      </tbody>
-    </table>
-     ';
+    return http_build_query($get);
 }
 
 function pager($base_url, $max, $per_page, $current) {
+    // by default, we add on any get parameter to the pager link
+    $get_argument_string = pager_filter_from_get($_GET);
+    if (!empty($get_argument_string)) {
+        $base_url .= '?' . $get_argument_string;
+    }
+
     $last_char = substr($base_url, -1);
 
     if (strpos($base_url, '?') && $last_char != '?' && $last_char != '&') {
@@ -500,3 +423,24 @@ function get_pager_from($val) {
 
     return 0;
 }
+<<<<<<< HEAD
+=======
+
+function get_availability_icons($exposed, $available_from, $available_until, $item_name) {
+    $icons = "";
+
+    if (!$exposed) {
+        $icons .= '<span class="glyphicon glyphicon-ban-circle has-tooltip" data-toggle="tooltip" data-placement="top" title="'. htmlspecialchars($item_name) .' not exposed"></span> ';
+    }
+
+    if (!is_item_available($available_from, $available_until)) {
+        $icons .= '<span class="glyphicon glyphicon-eye-close has-tooltip" data-toggle="tooltip" data-placement="top" title="'. htmlspecialchars($item_name) .' not available"></span> ';
+    }
+
+    if ($exposed && is_item_available($available_from, $available_until)) {
+        $icons .= '<span class="glyphicon glyphicon-eye-open has-tooltip" data-toggle="tooltip" data-placement="top" title="'. htmlspecialchars($item_name) .' exposed and available"></span> ';
+    }
+
+    return $icons;
+}
+>>>>>>> Nakiami/master

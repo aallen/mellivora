@@ -15,11 +15,15 @@ const CONFIG_PATH_BASE = '/var/www/mellivora/';
 // database settings
 require('db.inc.php');
 
+// language
+const CONFIG_SITE_LANGUAGE = 'en';
+
 // general site settings
 const CONFIG_SITE_NAME = 'Mellivora';
 const CONFIG_SITE_SLOGAN = 'Mellivora, the CTF engine';
 const CONFIG_SITE_DESCRIPTION = '';
-const CONFIG_SITE_URL = 'https://localhost/';
+const CONFIG_SITE_URL = 'http://localhost/';
+const CONFIG_SITE_URL_STATIC_RESOURCES = 'http://localhost/';
 const CONFIG_SITE_ADMIN_RELPATH = 'admin/';
 define('CONFIG_SITE_ADMIN_URL', CONFIG_SITE_URL . CONFIG_SITE_ADMIN_RELPATH);
 
@@ -28,9 +32,9 @@ const CONFIG_INDEX_REDIRECT_TO = 'home'; // from index.php
 const CONFIG_LOGIN_REDIRECT_TO = 'home'; // after login
 const CONFIG_REGISTER_REDIRECT_TO = 'home'; // after successful account registration
 
-// team names longer than 40 chars may break page layout
+// team names longer than 30 chars may break page layout
 const CONFIG_MIN_TEAM_NAME_LENGTH = 2;
-const CONFIG_MAX_TEAM_NAME_LENGTH = 40;
+const CONFIG_MAX_TEAM_NAME_LENGTH = 30;
 const CONFIG_ACCOUNTS_SIGNUP_ALLOWED = true;
 const CONFIG_ACCOUNTS_DEFAULT_ENABLED = true;
 
@@ -39,7 +43,7 @@ const CONFIG_ACCOUNTS_DEFAULT_ENABLED = true;
 const CONFIG_ACCOUNTS_EMAIL_PASSWORD_ON_SIGNUP = false;
 
 // is site SSL compatible? if true, ssl will be forced on certain pages
-const CONFIG_SSL_COMPAT = true;
+const CONFIG_SSL_COMPAT = false;
 
 // session & cookie expiry time in seconds
 // 0 = until browser is closed
@@ -51,6 +55,7 @@ const CONFIG_LOG_VALIDATION_FAILURE_ID = true;
 
 // maximum file upload size
 const CONFIG_MAX_FILE_UPLOAD_SIZE = 5242880;
+const CONFIG_APPEND_MD5_TO_DOWNLOADS = false;
 
 // email stuff
 const CONFIG_EMAIL_USE_SMTP = false;
