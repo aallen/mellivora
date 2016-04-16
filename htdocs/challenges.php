@@ -1,14 +1,14 @@
 <?php
 
 require('../include/mellivora.inc.php');
-require(CONST_PATH_THIRDPARTY_COMPOSER . 'erusev/parsedown/Parsedown.php');
+require(CONST_PATH_THIRDPARTY . 'nbbc/nbbc.php');
 
 enforce_authentication();
 
 $time = time();
 
-$md = new Parsedown();
-
+$bbc = new BBCode();
+$bbc->SetEnableSmileys(false);
 
 head('Challenges');
 
@@ -103,7 +103,7 @@ if ($time < $current_category['available_from'] || $time > $current_category['av
 
 // write out the category description, if one exists
 if ($current_category['description']) {
-    echo '<div id="category-description">', $md->text($current_category['description']), '</div>';
+    echo '<div id="category-description">', $bbc->parse($current_category['description']), '</div>';
 }
 
 // get all the challenges for the selected category
@@ -244,7 +244,7 @@ foreach($challenges as $challenge) {
         if ($challenge['description']) {
             echo '
             <div class="challenge-description">
-                ',$md->text($challenge['description']),'
+                ',$bbc->parse($challenge['description']),'
             </div> <!-- / challenge-description -->';
         }
 
@@ -266,11 +266,6 @@ foreach($challenges as $challenge) {
             cache_end(CONST_CACHE_NAME_CHALLENGE_HINTS . $challenge['id']);
         }
 
-<<<<<<< HEAD
-                foreach ($hints as $hint) {
-                    message_inline_yellow('<strong>Hint!</strong> ' . $md->text($hint['body']), false);
-                }
-=======
         // write out files
         $files = cache_array_get(CONST_CACHE_NAME_FILES . $challenge['id'], CONFIG_CACHE_TIME_FILES);
         if (!is_array($files)) {
@@ -291,7 +286,6 @@ foreach($challenges as $challenge) {
                 CONST_CACHE_NAME_FILES . $challenge['id']
             );
         }
->>>>>>> Nakiami/master
 
         if (count($files)) {
             print_attachments($files);

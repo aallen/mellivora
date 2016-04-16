@@ -4,8 +4,7 @@ function dynamic_menu_content() {
     $cache_name = user_is_logged_in() ? 'logged_in_'.$_SESSION['class'] : 'guest';
 
     if (cache_start($cache_name, CONFIG_CACHE_TIME_DYNAMIC, CONST_CACHE_DYNAMIC_MENU_GROUP)) {
-        $values[':class'] = $_SESSION['class'];
-	$entries = db_query_fetch_all(
+        $entries = db_query_fetch_all(
             'SELECT
                 title,
                 internal_page,
@@ -16,10 +15,10 @@ function dynamic_menu_content() {
                 dynamic_menu
             WHERE
                 '.(user_is_logged_in() ?
-                    'min_user_class <= :class AND (visibility = "private" OR visibility = "both")' :
+                    'min_user_class <= '.$_SESSION['class'].' AND (visibility = "private" OR visibility = "both")' :
                     'visibility = "public" OR visibility = "both"'
             ).'
-            ORDER BY priority DESC', $values
+            ORDER BY priority DESC'
         );
 
         foreach($entries as $entry) {

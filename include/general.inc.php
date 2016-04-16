@@ -327,13 +327,6 @@ function delete_challenge_cascading ($id) {
         );
 
         db_delete(
-            'flags',
-            array(
-                'challenges_id'=>$id
-            )
-        );
-
-        db_delete(
             'hints',
             array(
                 'challenge'=>$id

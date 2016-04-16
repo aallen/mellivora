@@ -102,64 +102,17 @@ function form_generic ($name, $generic) {
     ';
 }
 
-function form_textarea($name, $prefill = false, $md_supported = false, $nolable = false) {
-    $name = htmlspecialchars($name);
-    $field_name = strtolower(str_replace(' ','_',$name));
-    if(!$nolable){
-        echo '
-        <div class="form-group">
-            <label class="col-sm-2 control-label" for="',$field_name,'">',$name,'</label>
-            <div class="col-sm-10">';
-            if($md_supported){
-                echo '
-                <a href="https://guides.github.com/features/mastering-markdown/" target="_blank">
-                    <span class="octicon octicon-markdown"></span>
-                    Markdown supported
-                </a>';
-            }
-    }
-    echo '
-    <textarea id="',$field_name,'" name="',$field_name,'" class="form-control" rows="10">',($prefill !== false ? htmlspecialchars($prefill) : ''),'</textarea>';
-    if(!$nolable){
-        echo '
-            </div>
-        </div>
-       ';
-    }
-}
-
-function form_textarea_container($name, $prefill= array(array('flag'=>'')), $md_supported = false) {
+function form_textarea($name, $prefill = false) {
     $name = htmlspecialchars($name);
     $field_name = strtolower(str_replace(' ','_',$name));
     echo '
-        <div class="form-group">
-            <label class="col-sm-2 control-label" for="',$field_name,'">',$name,'</label>
-            <div class="col-sm-10">
-
-                    <!-- Nav tabs -->
-                    <ul class="nav nav-tabs" role="tablist">';
-        $k=1;
-        foreach($prefill as $i){
-            echo '<li role="presentation"',($k == 1 ? ' class="active"' : ''), '><a href="#flag_',$k,'" aria-controls="',$k,'" role="tab" data-toggle="tab">',$k,'</a></li>';
-            $k++;
-        }
-    
-    echo '
-                        <li role="presentation" class="add-flag"><a href="#">+</a></li>
-                    </ul>
-
-                    <!-- Tab panes -->
-                    <div class="tab-content">';
-        $k=1;
-        foreach($prefill as $i){
-            echo '<div role="tabpanel" class="tab-pane ',($k == 1 ? ' active' : ''), '" id="flag_',$k,'">',form_textarea("flag_".$k,$i['flag'],false,true),'</div>';
-            $k++;
-        }
-                        echo '
-                    </div>
-
-            </div>
-        </div>';
+    <div class="form-group">
+      <label class="col-sm-2 control-label" for="',$field_name,'">',$name,'</label>
+      <div class="col-sm-10">
+          <textarea id="',$field_name,'" name="',$field_name,'" class="form-control" rows="10">',($prefill !== false ? htmlspecialchars($prefill) : ''),'</textarea>
+      </div>
+    </div>
+    ';
 }
 
 function form_button_submit ($name, $type = 'primary') {
@@ -214,6 +167,17 @@ function form_select ($opts, $name, $value, $selected, $option, $optgroup='') {
     ';
 }
 
+function form_bbcode_manual() {
+    echo '
+    <div class="form-group">
+      <label class="col-sm-2 control-label" for="bbcode">BBcode</label>
+      <div class="col-sm-10">';
+    bbcode_manual();
+    echo '
+      </div>
+    </div>
+    ';
+}
 
 function form_logout() {
     echo '
@@ -275,5 +239,6 @@ function user_class_select($selected = null) {
             'opt'=>user_class_name(CONST_USER_CLASS_MODERATOR)
         )
     );
+
     form_select($options, 'Min user class', 'val', $selected, 'opt');
 }

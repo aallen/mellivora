@@ -24,14 +24,8 @@ function head($title = '') {
     <link rel="icon" href="',CONFIG_SITE_URL_STATIC_RESOURCES,'img/favicon.png" type="image/png" />
 
     <!-- CSS -->
-<<<<<<< HEAD
-    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
-    <link href="',CONFIG_SITE_URL,'css/mellivora.css" rel="stylesheet">
-    <link href="',CONFIG_SITE_URL,'css/octicons/octicons.css" rel="stylesheet">';
-=======
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
     <link href="',CONFIG_SITE_URL_STATIC_RESOURCES,'css/mellivora.css" rel="stylesheet">';
->>>>>>> Nakiami/master
 
     js_global_dict();
 
@@ -137,12 +131,7 @@ function foot () {
 <!-- JS -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-<<<<<<< HEAD
-<script type="text/javascript" src="',CONFIG_SITE_URL,'js/mellivora.js"></script>
-<script type="text/javascript" src="',CONFIG_SITE_URL,'js/forms.js"></script>
-=======
 <script type="text/javascript" src="',CONFIG_SITE_URL_STATIC_RESOURCES,'js/mellivora.js"></script>
->>>>>>> Nakiami/master
 
 </body>
 </html>';
@@ -268,6 +257,84 @@ function menu_management () {
     </div>
 </div>
 ';
+}
+
+function bbcode_manual () {
+    echo '
+    <table>
+        <tr>
+        <td>
+            <ul>
+            <li><b>Text Styles:</b>
+                <ul>
+                <li>[b]...[/b]</li>
+                <li>[i]...[/i]</li>
+                <li>[u]...[/u]</li>
+                <li>[s]...[/s]</li>
+                <li>[sup]...[/sup]</li>
+                <li>[sub]...[/sub]</li>
+                <li>[spoiler]...[/spoiler]</li>
+                <li>[acronym]...[/acronym]</li>
+                <li>[size=6]...[/size]</li>
+                <li>[color=red]...[/color]</li>
+                <li>[font=verdana]...[/font]</li>
+                </ul>
+            </li>
+            <li><b>Links:</b>
+                <ul>
+                <li>[url]...[/url]</li>
+                <li>[url=...]text[/url]</li>
+                <li>[email]...[/email]</li>
+                <li>[wiki]</li>
+                </ul>
+            </li>
+            </ul>
+        </td>
+        <td>
+            <ul>
+            <li><b>Replaced Items:</b>
+                <ul>
+                <li>[img]...[/img]</li>
+                <li>[rule]</li>
+                <li>[br]</li>
+                </ul>
+            </li>
+            <li><b>Alignment:</b>
+                <ul>
+                <li>[center]...[/center]</li>
+                <li>[left]...[/left]</li>
+                <li>[right]...[/right]</li>
+                <li>[indent]...[/indent]</li>
+                </ul>
+            </li>
+            <li><b>Columns:</b>
+                <ul>
+                <li>[columns]...[/columns]</li>
+                <li>[nextcol]</li>
+                </ul>
+            </li>
+            <li><b>Containers:</b>
+                <ul>
+                <li>[code]...[/code]</li>
+                <li>[quote]...[/quote]</li>
+                </ul>
+            </li>
+            </ul>
+        </td>
+
+        <td>
+            <ul>
+            <li><b>Lists:</b>
+                <ul>
+                <li>[list]...[/list]</li>
+                <li>[*]...</li>
+                </ul>
+            </li>
+            </ul>
+        </td>
+        </tr>
+    </table>
+    ';
 }
 
 function js_global_dict () {
@@ -423,8 +490,6 @@ function get_pager_from($val) {
 
     return 0;
 }
-<<<<<<< HEAD
-=======
 
 function get_availability_icons($exposed, $available_from, $available_until, $item_name) {
     $icons = "";
@@ -443,4 +508,3 @@ function get_availability_icons($exposed, $available_from, $available_until, $it
 
     return $icons;
 }
->>>>>>> Nakiami/master

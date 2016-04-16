@@ -17,7 +17,7 @@ $hint = db_select_one(
 );
 
 form_start(CONFIG_SITE_ADMIN_RELPATH . 'actions/edit_hint');
-form_textarea('Body', $hint['body'],true);
+form_textarea('Body', $hint['body']);
 
 $opts = db_query_fetch_all(
     'SELECT

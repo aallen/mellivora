@@ -10,9 +10,10 @@ head(lang_get('home'));
 
 if (cache_start(CONST_CACHE_NAME_HOME, CONFIG_CACHE_TIME_HOME)) {
 
-    require(CONST_PATH_THIRDPARTY_COMPOSER . 'erusev/parsedown/Parsedown.php');
-    
-    $md = new Parsedown();
+    require(CONST_PATH_THIRDPARTY . 'nbbc/nbbc.php');
+
+    $bbc = new BBCode();
+    $bbc->SetEnableSmileys(false);
 
     $news = db_query_fetch_all('SELECT * FROM news ORDER BY added DESC');
     foreach ($news as $item) {
@@ -21,7 +22,7 @@ if (cache_start(CONST_CACHE_NAME_HOME, CONFIG_CACHE_TIME_HOME)) {
             section_head($item['title']);
             echo '
             <div class="news-body">
-                ',$md->text($item['body']),'
+                ',$bbc->parse($item['body']),'
             </div>
         </div>
         ';

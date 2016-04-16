@@ -22,7 +22,7 @@ if (array_get($_GET, 'bcc') == 'all') {
 
 section_subhead('New email');
 
-message_inline_blue('Separate receiver emails with a comma and optional whitespace. You can use Markdown. If you do, you must send as HTML email.');
+message_inline_blue('Separate receiver emails with a comma and optional whitespace. You can use BBCode. If you do, you must send as HTML email.');
 
 form_start(CONFIG_SITE_ADMIN_RELPATH . 'actions/new_email');
 
@@ -37,7 +37,7 @@ if(isset($bcc)) {
 }
 
 form_input_text('Subject');
-form_textarea('Body', false, true);
+form_textarea('Body');
 
 form_input_checkbox('HTML email');
 

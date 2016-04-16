@@ -18,7 +18,7 @@ menu_management();
 section_subhead('Edit dynamic page: ' . $page['title']);
 form_start(CONFIG_SITE_ADMIN_RELPATH . 'actions/edit_dynamic_page');
 form_input_text('Title', $page['title']);
-form_textarea('Body', $page['body'], true);
+form_textarea('Body', $page['body']);
 
 dynamic_visibility_select($page['visibility']);
 
@@ -28,6 +28,7 @@ form_hidden('action', 'edit');
 form_hidden('id', $_GET['id']);
 
 form_button_submit('Save changes');
+form_bbcode_manual();
 form_end();
 
 section_subhead('Delete');
