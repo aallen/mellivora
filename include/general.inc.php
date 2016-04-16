@@ -488,8 +488,6 @@ function array_search_matching_key ($needle, $haystack, $key, $transform_using_f
 
     return false;
 }
-<<<<<<< HEAD
-=======
 
 function is_item_available($available_from, $available_until) {
     $now = time();
@@ -504,4 +502,3 @@ function is_item_available($available_from, $available_until) {
 
     return true;
 }
->>>>>>> Nakiami/master
